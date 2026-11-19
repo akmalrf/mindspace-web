@@ -1,0 +1,972 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MindSpace – Safe Place for Tired Minds</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <script src="https://unpkg.com/lucide@0.469.0/dist/umd/lucide.min.js"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Poppins', 'sans-serif'],
+          },
+          colors: {
+            pastel: {
+              50: '#F5FAFF',
+              100: '#EAF4FF',
+              200: '#D6EBFF',
+              300: '#B5DCFF',
+              400: '#82C2FA',
+              500: '#4F9CF2',
+              600: '#357ED8',
+              700: '#265FA8',
+              800: '#1E3A5F',
+            }
+          }
+        }
+      }
+    };
+  </script>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="antialiased selection:bg-pastel-200 selection:text-pastel-800">
+
+  <!-- Decorative subtle clouds & stars -->
+  <div class="pointer-events-none fixed inset-0 overflow-hidden -z-10" aria-hidden="true">
+    <div class="absolute -top-16 -left-16 w-72 h-72 rounded-full bg-pastel-200/40 blur-3xl"></div>
+    <div class="absolute top-1/3 -right-20 w-80 h-80 rounded-full bg-pastel-300/25 blur-3xl"></div>
+    <div class="absolute bottom-0 left-1/4 w-96 h-64 rounded-full bg-pastel-100/60 blur-3xl"></div>
+    <svg class="twinkle absolute top-24 left-[8%] w-5 h-5 text-pastel-400" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 7.2L22 12l-7.6 2.8L12 22l-2.4-7.2L2 12l7.6-2.8z"/></svg>
+    <svg class="twinkle absolute top-40 right-[12%] w-4 h-4 text-pastel-300" style="animation-delay:1.2s" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 7.2L22 12l-7.6 2.8L12 22l-2.4-7.2L2 12l7.6-2.8z"/></svg>
+    <svg class="twinkle absolute bottom-28 left-[15%] w-3.5 h-3.5 text-pastel-400" style="animation-delay:0.6s" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 7.2L22 12l-7.6 2.8L12 22l-2.4-7.2L2 12l7.6-2.8z"/></svg>
+  </div>
+
+  <!-- Top Sticky Navigation -->
+  <header class="sticky top-0 z-40 bg-white/85 backdrop-blur-md border-b border-pastel-200/70">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16">
+        <!-- Brand Logo -->
+        <button type="button" data-nav="home" class="flex items-center gap-2.5 text-left group focus:outline-none">
+          <img src="assets/logo-mindspace.png" alt="Logo MindSpace" class="h-10 w-auto object-contain max-w-full transition-transform group-hover:scale-105" />
+          <div class="hidden sm:block leading-tight">
+            <span class="block text-base font-bold text-pastel-800 tracking-tight">MindSpace</span>
+            <span class="block text-[11px] font-medium text-pastel-600">Safe Place for Tired Minds</span>
+          </div>
+        </button>
+
+        <!-- Desktop Navigation -->
+        <nav class="hidden lg:flex items-center gap-1" aria-label="Navigasi Utama">
+          <button type="button" data-nav="home" class="nav-btn px-3 py-2 rounded-xl text-sm font-medium transition-colors">Beranda</button>
+          <button type="button" data-nav="ai-buddy" class="nav-btn px-3 py-2 rounded-xl text-sm font-medium transition-colors">AI Buddy</button>
+          <button type="button" data-nav="stories" class="nav-btn px-3 py-2 rounded-xl text-sm font-medium transition-colors">Anonymous Story</button>
+          <button type="button" data-nav="psychology" class="nav-btn px-3 py-2 rounded-xl text-sm font-medium transition-colors">Psychology Corner</button>
+          <button type="button" data-nav="consultation" class="nav-btn px-3 py-2 rounded-xl text-sm font-medium transition-colors">Konsultasi</button>
+          <button type="button" data-nav="mood" class="nav-btn px-3 py-2 rounded-xl text-sm font-medium transition-colors">Mood Tracker</button>
+          <button type="button" data-nav="self-care" class="nav-btn px-3 py-2 rounded-xl text-sm font-medium transition-colors">Self-Care</button>
+        </nav>
+
+        <!-- User Account & Mobile Toggle -->
+        <div class="flex items-center gap-2">
+          <button type="button" data-nav="profile" id="header-profile-btn" class="flex items-center gap-2 px-3.5 py-2 rounded-full bg-pastel-100 hover:bg-pastel-200 text-pastel-800 text-sm font-medium transition-colors">
+            <span id="header-avatar-dot" class="w-6 h-6 rounded-full bg-pastel-500 text-white flex items-center justify-center text-xs font-semibold">M</span>
+            <span id="header-user-name" class="hidden sm:inline max-w-[110px] truncate">Masuk</span>
+          </button>
+          <button type="button" id="mobile-menu-toggle" class="lg:hidden p-2 rounded-xl text-pastel-700 hover:bg-pastel-100 focus:outline-none" aria-label="Buka Menu">
+            <i data-lucide="menu" class="w-6 h-6"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mobile Navigation Drawer -->
+    <div id="mobile-menu" class="hidden lg:hidden border-t border-pastel-100 bg-white/95 backdrop-blur-md px-4 py-3 space-y-1">
+      <button type="button" data-nav="home" class="mobile-nav-btn w-full text-left px-3.5 py-2.5 rounded-xl text-sm font-medium flex items-center gap-2.5"><i data-lucide="home" class="w-4 h-4"></i> Beranda</button>
+      <button type="button" data-nav="ai-buddy" class="mobile-nav-btn w-full text-left px-3.5 py-2.5 rounded-xl text-sm font-medium flex items-center gap-2.5"><i data-lucide="message-circle-heart" class="w-4 h-4"></i> AI Buddy</button>
+      <button type="button" data-nav="stories" class="mobile-nav-btn w-full text-left px-3.5 py-2.5 rounded-xl text-sm font-medium flex items-center gap-2.5"><i data-lucide="feather" class="w-4 h-4"></i> Anonymous Story</button>
+      <button type="button" data-nav="psychology" class="mobile-nav-btn w-full text-left px-3.5 py-2.5 rounded-xl text-sm font-medium flex items-center gap-2.5"><i data-lucide="book-open" class="w-4 h-4"></i> Psychology Corner</button>
+      <button type="button" data-nav="consultation" class="mobile-nav-btn w-full text-left px-3.5 py-2.5 rounded-xl text-sm font-medium flex items-center gap-2.5"><i data-lucide="stethoscope" class="w-4 h-4"></i> Konsultasi Psikolog</button>
+      <button type="button" data-nav="mood" class="mobile-nav-btn w-full text-left px-3.5 py-2.5 rounded-xl text-sm font-medium flex items-center gap-2.5"><i data-lucide="smile" class="w-4 h-4"></i> Mood Tracker</button>
+      <button type="button" data-nav="self-care" class="mobile-nav-btn w-full text-left px-3.5 py-2.5 rounded-xl text-sm font-medium flex items-center gap-2.5"><i data-lucide="sparkles" class="w-4 h-4"></i> Self-Care Corner</button>
+      <button type="button" data-nav="profile" class="mobile-nav-btn w-full text-left px-3.5 py-2.5 rounded-xl text-sm font-medium flex items-center gap-2.5"><i data-lucide="user" class="w-4 h-4"></i> Profil &amp; Pengaturan</button>
+    </div>
+  </header>
+
+  <!-- Main Content Container -->
+  <main id="app-main" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10 min-h-[75vh]">
+
+    <!-- ==================== 1. HOME VIEW ==================== -->
+    <section id="view-home" class="page-view space-y-16 fade-in">
+      <!-- Hero Section -->
+      <div class="relative rounded-[2rem] bg-gradient-to-br from-pastel-100 via-white to-pastel-200/70 border border-pastel-200 p-6 sm:p-10 lg:p-14 overflow-hidden shadow-sm">
+        <!-- Decorative soft cloud shapes -->
+        <div class="absolute -top-10 right-10 w-40 h-40 bg-white/60 rounded-full blur-2xl pointer-events-none"></div>
+        <div class="grid lg:grid-cols-12 gap-8 items-center relative z-10">
+          <div class="lg:col-span-7 space-y-6">
+            <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/90 border border-pastel-200 text-pastel-600 text-xs font-semibold shadow-sm">
+              <i data-lucide="cloud" class="w-3.5 h-3.5 fill-pastel-300 text-pastel-500"></i>
+              <span>MindSpace • Safe Place for Tired Minds</span>
+            </div>
+            <h1 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-pastel-800 leading-tight tracking-tight">
+              A Safe Space to Express Your Feelings
+            </h1>
+            <p class="text-base sm:text-lg text-pastel-700/90 leading-relaxed max-w-2xl">
+              Ruang digital yang tenang dan suportif bagi mahasiswa serta generasi muda untuk mencurahkan isi hati, memantau suasana hati, belajar kesehatan mental, dan menemukan akses dukungan profesional.
+            </p>
+            <div class="flex flex-wrap items-center gap-3.5 pt-2">
+              <button type="button" id="btn-explore-mindspace" class="px-6 py-3.5 rounded-2xl bg-pastel-500 hover:bg-pastel-600 text-white font-semibold text-sm sm:text-base shadow-md shadow-pastel-500/25 transition-all flex items-center gap-2">
+                <span>Explore MindSpace</span>
+                <i data-lucide="arrow-down-right" class="w-4 h-4"></i>
+              </button>
+              <button type="button" data-nav="ai-buddy" class="px-6 py-3.5 rounded-2xl bg-white hover:bg-pastel-50 text-pastel-700 border border-pastel-300 font-semibold text-sm sm:text-base transition-all flex items-center gap-2">
+                <i data-lucide="sparkles" class="w-4 h-4 text-pastel-500"></i>
+                <span>Start Your Journey</span>
+              </button>
+            </div>
+            <div class="flex flex-wrap items-center gap-4 pt-2 text-xs text-pastel-600 font-medium">
+              <span class="flex items-center gap-1.5"><i data-lucide="shield-check" class="w-4 h-4 text-pastel-500"></i> Privasi Terjaga</span>
+              <span class="flex items-center gap-1.5"><i data-lucide="heart-handshake" class="w-4 h-4 text-pastel-500"></i> Tanpa Menghakimi</span>
+              <span class="flex items-center gap-1.5"><i data-lucide="graduation-cap" class="w-4 h-4 text-pastel-500"></i> Ramah Mahasiswa</span>
+            </div>
+          </div>
+          <div class="lg:col-span-5 flex justify-center">
+            <div class="relative w-64 sm:w-80 lg:w-full max-w-sm">
+              <div class="absolute inset-0 bg-pastel-300/30 rounded-full blur-2xl scale-90"></div>
+              <img src="assets/hero-cloud.jpg" alt="Ilustrasi Awan Pastel MindSpace" class="float-slow relative rounded-[2rem] shadow-lg border-4 border-white w-full h-auto object-cover" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main Features Section -->
+      <div id="home-features-section" class="space-y-6">
+        <div class="text-center max-w-2xl mx-auto space-y-2">
+          <span class="text-xs font-semibold uppercase tracking-wider text-pastel-500">Fitur Utama MindSpace</span>
+          <h2 class="text-2xl sm:text-3xl font-bold text-pastel-800">Temukan Dukungan yang Kamu Butuhkan</h2>
+          <p class="text-sm sm:text-base text-pastel-700/80">Pilih fitur yang paling sesuai dengan kondisimu hari ini, semuanya dirancang lembut dan mudah digunakan.</p>
+        </div>
+
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          <!-- Card 1 -->
+          <button type="button" data-nav="ai-buddy" class="soft-card soft-card-hover rounded-3xl p-6 text-left flex flex-col justify-between gap-4">
+            <div class="space-y-3">
+              <div class="w-12 h-12 rounded-2xl bg-pastel-100 text-pastel-600 flex items-center justify-center">
+                <i data-lucide="message-circle-heart" class="w-6 h-6"></i>
+              </div>
+              <h3 class="text-lg font-bold text-pastel-800">AI Buddy</h3>
+              <p class="text-sm text-pastel-700/80 leading-relaxed">Teman ngobrol suportif untuk mencurahkan perasaan sehari-hari kapan saja tanpa rasa takut dihakimi.</p>
+            </div>
+            <span class="text-xs font-semibold text-pastel-600 flex items-center gap-1">Mulai Mengobrol <i data-lucide="chevron-right" class="w-4 h-4"></i></span>
+          </button>
+
+          <!-- Card 2 -->
+          <button type="button" data-nav="stories" class="soft-card soft-card-hover rounded-3xl p-6 text-left flex flex-col justify-between gap-4">
+            <div class="space-y-3">
+              <div class="w-12 h-12 rounded-2xl bg-indigo-50 text-indigo-500 flex items-center justify-center">
+                <i data-lucide="feather" class="w-6 h-6"></i>
+              </div>
+              <h3 class="text-lg font-bold text-pastel-800">Anonymous Story Sharing</h3>
+              <p class="text-sm text-pastel-700/80 leading-relaxed">Bagikan ceritamu secara anonim dengan moderasi aman dan saling kirim peluk virtual antar mahasiswa.</p>
+            </div>
+            <span class="text-xs font-semibold text-pastel-600 flex items-center gap-1">Bagikan Cerita <i data-lucide="chevron-right" class="w-4 h-4"></i></span>
+          </button>
+
+          <!-- Card 3 -->
+          <button type="button" data-nav="psychology" class="soft-card soft-card-hover rounded-3xl p-6 text-left flex flex-col justify-between gap-4">
+            <div class="space-y-3">
+              <div class="w-12 h-12 rounded-2xl bg-sky-50 text-sky-600 flex items-center justify-center">
+                <i data-lucide="book-open-check" class="w-6 h-6"></i>
+              </div>
+              <h3 class="text-lg font-bold text-pastel-800">Psychology Corner</h3>
+              <p class="text-sm text-pastel-700/80 leading-relaxed">Artikel praktis tentang stres akademik, kecemasan, burnout, video edukasi, dan informasi webinar.</p>
+            </div>
+            <span class="text-xs font-semibold text-pastel-600 flex items-center gap-1">Baca Edukasi <i data-lucide="chevron-right" class="w-4 h-4"></i></span>
+          </button>
+
+          <!-- Card 4 -->
+          <button type="button" data-nav="consultation" class="soft-card soft-card-hover rounded-3xl p-6 text-left flex flex-col justify-between gap-4">
+            <div class="space-y-3">
+              <div class="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
+                <i data-lucide="stethoscope" class="w-6 h-6"></i>
+              </div>
+              <h3 class="text-lg font-bold text-pastel-800">Konsultasi Psikolog</h3>
+              <p class="text-sm text-pastel-700/80 leading-relaxed">Informasi jadwal, pilihan sesi konseling, dan alur pengajuan konsultasi dengan tenaga profesional.</p>
+            </div>
+            <span class="text-xs font-semibold text-pastel-600 flex items-center gap-1">Lihat Layanan <i data-lucide="chevron-right" class="w-4 h-4"></i></span>
+          </button>
+
+          <!-- Card 5 -->
+          <button type="button" data-nav="mood" class="soft-card soft-card-hover rounded-3xl p-6 text-left flex flex-col justify-between gap-4">
+            <div class="space-y-3">
+              <div class="w-12 h-12 rounded-2xl bg-amber-50 text-amber-500 flex items-center justify-center">
+                <i data-lucide="smile" class="w-6 h-6"></i>
+              </div>
+              <h3 class="text-lg font-bold text-pastel-800">Mood Tracker</h3>
+              <p class="text-sm text-pastel-700/80 leading-relaxed">Catat suasana hatimu setiap hari dengan emoji, lihat kalender mood privat, dan pantau grafik emosimu.</p>
+            </div>
+            <span class="text-xs font-semibold text-pastel-600 flex items-center gap-1">Catat Mood <i data-lucide="chevron-right" class="w-4 h-4"></i></span>
+          </button>
+
+          <!-- Card 6 -->
+          <button type="button" data-nav="self-care" class="soft-card soft-card-hover rounded-3xl p-6 text-left flex flex-col justify-between gap-4">
+            <div class="space-y-3">
+              <div class="w-12 h-12 rounded-2xl bg-purple-50 text-purple-500 flex items-center justify-center">
+                <i data-lucide="sparkles" class="w-6 h-6"></i>
+              </div>
+              <h3 class="text-lg font-bold text-pastel-800">Self-Care Corner</h3>
+              <p class="text-sm text-pastel-700/80 leading-relaxed">Latihan pernapasan terpandu, relaksasi grounding, jurnal harian, dan refleksi diri ringan.</p>
+            </div>
+            <span class="text-xs font-semibold text-pastel-600 flex items-center gap-1">Mulai Self-Care <i data-lucide="chevron-right" class="w-4 h-4"></i></span>
+          </button>
+        </div>
+      </div>
+
+      <!-- About / Purpose Section -->
+      <div class="soft-card rounded-[2rem] p-6 sm:p-10 grid md:grid-cols-12 gap-8 items-center">
+        <div class="md:col-span-7 space-y-4">
+          <span class="inline-block px-3 py-1 rounded-full bg-pastel-100 text-pastel-600 text-xs font-semibold">Tentang MindSpace</span>
+          <h2 class="text-2xl sm:text-3xl font-bold text-pastel-800">Menemani Langkahmu di Tengah Padatnya Tugas dan Ekspektasi</h2>
+          <p class="text-sm sm:text-base text-pastel-700/85 leading-relaxed">
+            Masa kuliah dan transisi menuju dewasa seringkali membawa tekanan akademik, kelelahan emosional, hingga rasa kesepian. MindSpace hadir sebagai pertolongan emosional awal yang hangat, mudah diakses, dan bebas stigma—membantumu mengenali perasaan sebelum berlanjut menjadi beban yang lebih berat.
+          </p>
+          <p class="text-xs sm:text-sm text-pastel-600 bg-pastel-50 border border-pastel-200 rounded-2xl p-4">
+            <strong>Catatan Transparansi Demo:</strong> Platform ini adalah prototipe web interaktif. Fitur AI Buddy, moderasi cerita, autentikasi akun, dan formulir konsultasi berjalan sebagai simulasi lokal di browser Anda.
+          </p>
+        </div>
+        <div class="md:col-span-5 grid grid-cols-2 gap-4">
+          <div class="rounded-2xl bg-pastel-100/80 p-5 text-center space-y-1">
+            <span class="text-2xl font-bold text-pastel-700">100%</span>
+            <p class="text-xs text-pastel-700/80">Anonim di Ruang Cerita</p>
+          </div>
+          <div class="rounded-2xl bg-sky-50 p-5 text-center space-y-1 border border-pastel-200">
+            <span class="text-2xl font-bold text-pastel-700">24/7</span>
+            <p class="text-xs text-pastel-700/80">Akses Self-Care &amp; Jurnal</p>
+          </div>
+          <div class="rounded-2xl bg-sky-50 p-5 text-center space-y-1 border border-pastel-200">
+            <span class="text-2xl font-bold text-pastel-700">Privat</span>
+            <p class="text-xs text-pastel-700/80">Mood Tracker Pribadi</p>
+          </div>
+          <div class="rounded-2xl bg-pastel-100/80 p-5 text-center space-y-1">
+            <span class="text-2xl font-bold text-pastel-700">119 ext.8</span>
+            <p class="text-xs text-pastel-700/80">Rujukan Darurat Resmi RI</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== 2. AI BUDDY VIEW ==================== -->
+    <section id="view-ai-buddy" class="page-view hidden space-y-5 fade-in">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div>
+          <div class="flex items-center gap-2 flex-wrap">
+            <h1 class="text-2xl sm:text-3xl font-bold text-pastel-800">AI Buddy</h1>
+            <span id="ai-mode-badge" class="px-2.5 py-0.5 rounded-full bg-pastel-200 text-pastel-700 text-[11px] font-semibold">Mode Simulasi</span>
+          </div>
+          <p class="text-sm text-pastel-700/80">Teman bicara virtual berbasis Gemini AI yang mendengarkan dengan hangat dan tanpa menghakimi.</p>
+        </div>
+        <div class="flex items-center gap-2 self-start sm:self-auto">
+          <button type="button" id="btn-gemini-settings" class="px-3.5 py-2 rounded-xl bg-pastel-500 hover:bg-pastel-600 text-white text-xs font-semibold flex items-center gap-1.5 shadow-xs">
+            <i data-lucide="key-round" class="w-3.5 h-3.5"></i> Atur Gemini API
+          </button>
+          <button type="button" id="btn-reset-chat" class="px-3.5 py-2 rounded-xl bg-white border border-pastel-200 hover:bg-pastel-50 text-xs font-medium text-pastel-700 flex items-center gap-1.5">
+            <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i> Mulai Obrolan Baru
+          </button>
+        </div>
+      </div>
+
+      <!-- Disclaimer & Emergency Info -->
+      <div class="rounded-2xl bg-amber-50/90 border border-amber-200 p-4 text-xs sm:text-sm text-amber-900 flex flex-col md:flex-row md:items-center justify-between gap-3">
+        <div class="flex items-start gap-2.5">
+          <i data-lucide="info" class="w-5 h-5 text-amber-600 shrink-0 mt-0.5"></i>
+          <p>
+            <strong>Batasan Layanan:</strong> AI Buddy adalah simulasi dukungan emosional awal dan informasi umum, <strong>bukan diagnosis medis maupun pengganti psikolog/psikiater</strong>.
+          </p>
+        </div>
+        <button type="button" id="btn-open-emergency" class="shrink-0 px-3.5 py-2 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-semibold flex items-center gap-1.5 shadow-sm">
+          <i data-lucide="phone-call" class="w-3.5 h-3.5"></i> Layanan Darurat (119)
+        </button>
+      </div>
+
+      <div class="grid lg:grid-cols-12 gap-5">
+        <!-- Chat Area -->
+        <div class="lg:col-span-8 soft-card rounded-3xl flex flex-col h-[540px] overflow-hidden">
+          <!-- Chat Header -->
+          <div class="px-5 py-3.5 border-b border-pastel-100 bg-pastel-50/70 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-full bg-pastel-200 flex items-center justify-center text-pastel-700 font-bold">☁️</div>
+              <div>
+                <p class="text-sm font-bold text-pastel-800">Awan • AI Buddy</p>
+                <p id="ai-chat-status" class="text-[11px] text-emerald-600 font-medium flex items-center gap-1">
+                  <span class="w-2 h-2 rounded-full bg-emerald-500 inline-block"></span> Siap mendengarkanmu
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Messages Container -->
+          <div id="chat-messages" class="flex-1 p-5 overflow-y-auto chat-scroll space-y-4 bg-gradient-to-b from-pastel-50/40 to-white"></div>
+
+          <!-- Topic Chips -->
+          <div class="px-4 py-2.5 border-t border-pastel-100 bg-pastel-50/50 flex items-center gap-2 overflow-x-auto">
+            <span class="text-[11px] font-semibold text-pastel-600 shrink-0">Topik cepat:</span>
+            <button type="button" class="topic-chip shrink-0 px-3 py-1 rounded-full bg-white border border-pastel-200 hover:border-pastel-400 text-xs text-pastel-700 transition-colors" data-topic="Aku lagi stres banget sama tugas kuliah dan skripsi">📚 Stres Akademik</button>
+            <button type="button" class="topic-chip shrink-0 px-3 py-1 rounded-full bg-white border border-pastel-200 hover:border-pastel-400 text-xs text-pastel-700 transition-colors" data-topic="Pikiranku penuh overthinking dan cemas terus akhir-akhir ini">💭 Overthinking &amp; Cemas</button>
+            <button type="button" class="topic-chip shrink-0 px-3 py-1 rounded-full bg-white border border-pastel-200 hover:border-pastel-400 text-xs text-pastel-700 transition-colors" data-topic="Aku merasa capek banget secara emosional dan burnout">🔋 Burnout &amp; Lelah</button>
+            <button type="button" class="topic-chip shrink-0 px-3 py-1 rounded-full bg-white border border-pastel-200 hover:border-pastel-400 text-xs text-pastel-700 transition-colors" data-topic="Lagi ada masalah sama teman atau keluarga">🤝 Pertemanan &amp; Keluarga</button>
+          </div>
+
+          <!-- Input Form -->
+          <form id="chat-form" class="p-3.5 bg-white border-t border-pastel-100 flex items-center gap-2.5">
+            <input type="text" id="chat-input" placeholder="Ceritakan apa yang sedang kamu rasakan..." class="flex-1 px-4 py-2.5 rounded-2xl bg-pastel-50 border border-pastel-200 focus:outline-none focus:border-pastel-400 text-sm text-pastel-800" autocomplete="off" />
+            <button type="submit" class="px-4 py-2.5 rounded-2xl bg-pastel-500 hover:bg-pastel-600 text-white font-semibold text-sm flex items-center gap-1.5 transition-colors shrink-0">
+              <span>Kirim</span>
+              <i data-lucide="send" class="w-4 h-4"></i>
+            </button>
+          </form>
+        </div>
+
+        <!-- Side Panel: Gemini Config, Crisis & Quick Grounding -->
+        <div class="lg:col-span-4 space-y-4">
+          <div class="soft-card rounded-3xl p-5 space-y-3 border-pastel-300 bg-pastel-50/70">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2 text-pastel-800 font-bold text-sm">
+                <i data-lucide="sparkles" class="w-4 h-4 text-pastel-500"></i>
+                <span>Koneksi Gemini AI</span>
+              </div>
+              <span id="gemini-status-pill" class="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-amber-100 text-amber-800">Belum Terhubung</span>
+            </div>
+            <p class="text-xs text-pastel-700/85 leading-relaxed">
+              Masukkan Gemini API Key Anda (disimpan lokal di browser ini) untuk mengaktifkan respons langsung dari Google Gemini.
+            </p>
+            <form id="gemini-quick-form" class="space-y-2">
+              <input type="password" id="gemini-api-key-input" placeholder="Tempel Gemini API Key (AIza...)" class="w-full px-3 py-2 rounded-xl bg-white border border-pastel-200 text-xs text-pastel-800 focus:outline-none focus:border-pastel-400" autocomplete="off" />
+              <div class="flex items-center gap-2">
+                <select id="gemini-model-select" class="flex-1 px-2.5 py-2 rounded-xl bg-white border border-pastel-200 text-xs text-pastel-800 focus:outline-none">
+                  <option value="gemini-2.5-flash">gemini-2.5-flash</option>
+                  <option value="gemini-2.5-pro">gemini-2.5-pro</option>
+                  <option value="gemini-2.0-flash">gemini-2.0-flash</option>
+                </select>
+                <button type="submit" class="px-3.5 py-2 rounded-xl bg-pastel-500 hover:bg-pastel-600 text-white text-xs font-semibold shrink-0">Hubungkan</button>
+              </div>
+            </form>
+            <button type="button" id="btn-gemini-disconnect" class="hidden w-full py-1.5 rounded-xl bg-white border border-rose-200 hover:bg-rose-50 text-rose-600 text-[11px] font-semibold">
+              Putuskan &amp; Hapus API Key
+            </button>
+          </div>
+          <div class="soft-card rounded-3xl p-5 space-y-3 border-rose-200 bg-rose-50/40">
+            <div class="flex items-center gap-2 text-rose-700 font-bold text-sm">
+              <i data-lucide="shield-alert" class="w-5 h-5"></i>
+              <span>Bantuan Profesional &amp; Darurat</span>
+            </div>
+            <p class="text-xs text-pastel-800/85 leading-relaxed">
+              Jika kamu berada dalam kondisi berbahaya, memiliki pikiran untuk menyakiti diri sendiri, atau butuh bantuan segera, hubungi layanan resmi Indonesia:
+            </p>
+            <ul class="space-y-2 text-xs text-pastel-800">
+              <li class="p-2.5 rounded-xl bg-white border border-rose-100">
+                <strong class="block text-rose-700">Healing119.id (Kemenkes RI)</strong>
+                <span>Telepon <strong>119 ext. 8</strong> atau chat di <strong>healing119.id</strong> (Layanan 24 jam dukungan psikologis)</span>
+              </li>
+              <li class="p-2.5 rounded-xl bg-white border border-rose-100">
+                <strong class="block text-rose-700">Darurat Medis Nasional</strong>
+                <span>Hubungi <strong>119</strong> atau kunjungi IGD Rumah Sakit / Puskesmas terdekat</span>
+              </li>
+            </ul>
+            <button type="button" data-nav="consultation" class="w-full py-2.5 rounded-xl bg-white border border-pastel-300 hover:bg-pastel-50 text-pastel-700 text-xs font-semibold transition-colors">
+              Lihat Info Konsultasi Psikolog →
+            </button>
+          </div>
+
+          <div class="soft-card rounded-3xl p-5 space-y-3">
+            <h3 class="text-sm font-bold text-pastel-800 flex items-center gap-2">
+              <i data-lucide="wind" class="w-4 h-4 text-pastel-500"></i> Butuh Tenang Cepat?
+            </h3>
+            <p class="text-xs text-pastel-700/80">Coba tarik napas perlahan selama 1 menit di Self-Care Corner atau catat perasaanmu di Mood Tracker.</p>
+            <div class="flex gap-2">
+              <button type="button" data-nav="self-care" class="flex-1 py-2 rounded-xl bg-pastel-100 hover:bg-pastel-200 text-pastel-700 text-xs font-semibold">Latihan Napas</button>
+              <button type="button" data-nav="mood" class="flex-1 py-2 rounded-xl bg-pastel-100 hover:bg-pastel-200 text-pastel-700 text-xs font-semibold">Mood Tracker</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== 3. ANONYMOUS STORY SHARING VIEW ==================== -->
+    <section id="view-stories" class="page-view hidden space-y-6 fade-in">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div>
+          <div class="flex items-center gap-2">
+            <h1 class="text-2xl sm:text-3xl font-bold text-pastel-800">Anonymous Story Sharing</h1>
+            <span class="px-2.5 py-0.5 rounded-full bg-pastel-200 text-pastel-700 text-[11px] font-semibold">Moderasi Simulasi</span>
+          </div>
+          <p class="text-sm text-pastel-700/80">Bagikan ceritamu tanpa menampilkan identitas. Semua cerita melalui proses moderasi sebelum tampil.</p>
+        </div>
+      </div>
+
+      <div class="grid lg:grid-cols-12 gap-6">
+        <!-- Story Submission Form -->
+        <div class="lg:col-span-5 space-y-4">
+          <div class="soft-card rounded-3xl p-6 space-y-4">
+            <div class="flex items-center justify-between">
+              <h2 class="text-lg font-bold text-pastel-800">Tulis Ceritamu</h2>
+              <span class="inline-flex items-center gap-1 text-xs font-medium text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full">
+                <i data-lucide="eye-off" class="w-3.5 h-3.5"></i> Identitas Anonim
+              </span>
+            </div>
+            <form id="story-form" class="space-y-3.5">
+              <div>
+                <label for="story-category" class="block text-xs font-semibold text-pastel-700 mb-1.5">Pilih Kategori</label>
+                <select id="story-category" class="w-full px-3.5 py-2.5 rounded-2xl bg-pastel-50 border border-pastel-200 text-sm text-pastel-800 focus:outline-none focus:border-pastel-400">
+                  <option value="Akademik">📚 Akademik</option>
+                  <option value="Keluarga">🏠 Keluarga</option>
+                  <option value="Pertemanan">🤝 Pertemanan</option>
+                  <option value="Kehidupan Pribadi">🌿 Kehidupan Pribadi</option>
+                </select>
+              </div>
+              <div>
+                <label for="story-content" class="block text-xs font-semibold text-pastel-700 mb-1.5">Ceritamu</label>
+                <textarea id="story-content" rows="5" placeholder="Tuliskan apa yang sedang kamu pendam. Tidak ada nama atau akun yang ditampilkan..." class="w-full px-3.5 py-3 rounded-2xl bg-pastel-50 border border-pastel-200 text-sm text-pastel-800 focus:outline-none focus:border-pastel-400 resize-none"></textarea>
+              </div>
+              <p class="text-[11px] text-pastel-600 leading-relaxed">
+                <i data-lucide="shield-check" class="w-3.5 h-3.5 inline mr-1 text-pastel-500"></i>
+                Cerita yang dikirim akan masuk antrean moderasi terlebih dahulu untuk menjaga ruang ini tetap aman dan suportif.
+              </p>
+              <button type="submit" class="w-full py-3 rounded-2xl bg-pastel-500 hover:bg-pastel-600 text-white font-semibold text-sm shadow-sm transition-colors">
+                Bagikan Cerita
+              </button>
+            </form>
+          </div>
+
+          <!-- Moderation Queue Box (Demo) -->
+          <div id="moderation-queue-box" class="soft-card rounded-3xl p-5 space-y-3 hidden">
+            <div class="flex items-center justify-between">
+              <h3 class="text-sm font-bold text-pastel-800">Antrean Moderasi (Demo)</h3>
+              <span class="text-[11px] px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 font-semibold">Menunggu Tinjauan</span>
+            </div>
+            <div id="moderation-queue-list" class="space-y-2.5"></div>
+          </div>
+        </div>
+
+        <!-- Story Feed -->
+        <div class="lg:col-span-7 space-y-4">
+          <div class="flex flex-wrap items-center gap-2" id="story-filter-bar">
+            <button type="button" class="story-filter-btn px-3.5 py-1.5 rounded-full text-xs font-semibold bg-pastel-500 text-white" data-cat="Semua">Semua</button>
+            <button type="button" class="story-filter-btn px-3.5 py-1.5 rounded-full text-xs font-semibold bg-white border border-pastel-200 text-pastel-700" data-cat="Akademik">Akademik</button>
+            <button type="button" class="story-filter-btn px-3.5 py-1.5 rounded-full text-xs font-semibold bg-white border border-pastel-200 text-pastel-700" data-cat="Keluarga">Keluarga</button>
+            <button type="button" class="story-filter-btn px-3.5 py-1.5 rounded-full text-xs font-semibold bg-white border border-pastel-200 text-pastel-700" data-cat="Pertemanan">Pertemanan</button>
+            <button type="button" class="story-filter-btn px-3.5 py-1.5 rounded-full text-xs font-semibold bg-white border border-pastel-200 text-pastel-700" data-cat="Kehidupan Pribadi">Kehidupan Pribadi</button>
+          </div>
+
+          <div id="stories-feed" class="space-y-4"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== 4. PSYCHOLOGY CORNER VIEW ==================== -->
+    <section id="view-psychology" class="page-view hidden space-y-8 fade-in">
+      <div>
+        <h1 class="text-2xl sm:text-3xl font-bold text-pastel-800">Psychology Corner</h1>
+        <p class="text-sm text-pastel-700/80">Edukasi kesehatan mental, tips mengelola stres akademik, video edukasi, dan informasi webinar.</p>
+      </div>
+
+      <!-- Category Filter -->
+      <div class="flex flex-wrap gap-2" id="article-filter-bar">
+        <button type="button" class="article-filter-btn px-4 py-1.5 rounded-full text-xs font-semibold bg-pastel-500 text-white" data-cat="Semua">Semua Topik</button>
+        <button type="button" class="article-filter-btn px-4 py-1.5 rounded-full text-xs font-semibold bg-white border border-pastel-200 text-pastel-700" data-cat="Stres Akademik">Stres Akademik</button>
+        <button type="button" class="article-filter-btn px-4 py-1.5 rounded-full text-xs font-semibold bg-white border border-pastel-200 text-pastel-700" data-cat="Kecemasan">Kecemasan</button>
+        <button type="button" class="article-filter-btn px-4 py-1.5 rounded-full text-xs font-semibold bg-white border border-pastel-200 text-pastel-700" data-cat="Burnout">Kelelahan Emosional</button>
+        <button type="button" class="article-filter-btn px-4 py-1.5 rounded-full text-xs font-semibold bg-white border border-pastel-200 text-pastel-700" data-cat="Kesehatan Mental">Kesehatan Mental</button>
+      </div>
+
+      <!-- Articles Grid -->
+      <div id="articles-grid" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5"></div>
+
+      <!-- Videos & Webinars -->
+      <div class="grid lg:grid-cols-12 gap-6 pt-2">
+        <!-- Educational Videos -->
+        <div class="lg:col-span-6 space-y-4">
+          <h2 class="text-xl font-bold text-pastel-800 flex items-center gap-2">
+            <i data-lucide="play-circle" class="w-5 h-5 text-pastel-500"></i> Video Edukasi (Demo)
+          </h2>
+          <div id="videos-list" class="space-y-3"></div>
+        </div>
+
+        <!-- Webinars -->
+        <div class="lg:col-span-6 space-y-4">
+          <h2 class="text-xl font-bold text-pastel-800 flex items-center gap-2">
+            <i data-lucide="calendar-heart" class="w-5 h-5 text-pastel-500"></i> Webinar Bersama Psikolog (Contoh)
+          </h2>
+          <div id="webinars-list" class="space-y-3"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== 5. KONSULTASI PSIKOLOG VIEW ==================== -->
+    <section id="view-consultation" class="page-view hidden space-y-6 fade-in">
+      <div>
+        <div class="flex items-center gap-2">
+          <h1 class="text-2xl sm:text-3xl font-bold text-pastel-800">Konsultasi Psikolog</h1>
+          <span class="px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-800 text-[11px] font-semibold">Placeholder / Simulasi Demo</span>
+        </div>
+        <p class="text-sm text-pastel-700/80">Akses informasi layanan konsultasi profesional untuk dukungan lanjutan.</p>
+      </div>
+
+      <div class="rounded-2xl bg-pastel-100/80 border border-pastel-300 p-4 text-xs sm:text-sm text-pastel-800 flex items-start gap-2.5">
+        <i data-lucide="alert-circle" class="w-5 h-5 text-pastel-600 shrink-0 mt-0.5"></i>
+        <p>
+          <strong>Pemberitahuan Penting:</strong> Daftar di bawah ini adalah <strong>data contoh (placeholder)</strong> untuk simulasi fitur platform. MindSpace belum terhubung dengan mitra psikolog aktif secara nyata. Jika membutuhkan layanan profesional segera, silakan kunjungi Puskesmas, RS terdekat, atau hubungi <strong>Healing119.id (119 ext. 8)</strong>.
+        </p>
+      </div>
+
+      <div class="grid lg:grid-cols-12 gap-6">
+        <!-- Psychologist Placeholder Cards + Fees -->
+        <div class="lg:col-span-7 space-y-5">
+          <h2 class="text-lg font-bold text-pastel-800">Contoh Profil &amp; Jadwal Konsultasi</h2>
+          <div id="psychologists-list" class="space-y-4"></div>
+
+          <!-- Fee & Terms -->
+          <div class="soft-card rounded-3xl p-6 space-y-3">
+            <h3 class="text-base font-bold text-pastel-800 flex items-center gap-2">
+              <i data-lucide="file-text" class="w-4 h-4 text-pastel-500"></i> Informasi Biaya &amp; Ketentuan (Contoh)
+            </h3>
+            <div class="grid sm:grid-cols-2 gap-3 text-xs">
+              <div class="p-3.5 rounded-2xl bg-pastel-50 border border-pastel-100">
+                <p class="font-bold text-pastel-800">Konsultasi Awal (30 Menit)</p>
+                <p class="text-pastel-600 font-semibold mt-0.5">Contoh: Rp0 – Rp50.000 (Subsidi Mahasiswa)</p>
+              </div>
+              <div class="p-3.5 rounded-2xl bg-pastel-50 border border-pastel-100">
+                <p class="font-bold text-pastel-800">Konseling Online / Akademik (60 Menit)</p>
+                <p class="text-pastel-600 font-semibold mt-0.5">Contoh: Rp100.000 – Rp175.000 / sesi</p>
+              </div>
+            </div>
+            <ul class="text-xs text-pastel-700/85 space-y-1 list-disc list-inside pt-1">
+              <li>Seluruh percakapan konseling dijaga kerahasiaannya sesuai kode etik psikologi.</li>
+              <li>Perubahan atau pembatalan jadwal dapat dilakukan maksimal 12 jam sebelum sesi.</li>
+              <li>Formulir di samping hanya menyimpan permintaan jadwal simulasi di browser Anda.</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Booking Request Form -->
+        <div class="lg:col-span-5 space-y-4">
+          <div class="soft-card rounded-3xl p-6 space-y-4">
+            <h2 class="text-lg font-bold text-pastel-800">Formulir Permintaan Jadwal</h2>
+            <form id="consult-form" class="space-y-3.5">
+              <div>
+                <label for="consult-psychologist" class="block text-xs font-semibold text-pastel-700 mb-1">Pilih Contoh Konselor</label>
+                <select id="consult-psychologist" class="w-full px-3.5 py-2.5 rounded-2xl bg-pastel-50 border border-pastel-200 text-sm text-pastel-800 focus:outline-none"></select>
+              </div>
+              <div>
+                <label for="consult-type" class="block text-xs font-semibold text-pastel-700 mb-1">Jenis Konsultasi</label>
+                <select id="consult-type" class="w-full px-3.5 py-2.5 rounded-2xl bg-pastel-50 border border-pastel-200 text-sm text-pastel-800 focus:outline-none">
+                  <option value="Konsultasi Awal (30 menit)">Konsultasi Awal (30 menit)</option>
+                  <option value="Konseling Online Video (60 menit)">Konseling Online Video (60 menit)</option>
+                  <option value="Konseling Online Chat (60 menit)">Konseling Online Chat (60 menit)</option>
+                  <option value="Konseling Akademik &amp; Karir">Konseling Akademik &amp; Karir</option>
+                </select>
+              </div>
+              <div class="grid grid-cols-2 gap-3">
+                <div>
+                  <label for="consult-date" class="block text-xs font-semibold text-pastel-700 mb-1">Tanggal</label>
+                  <input type="date" id="consult-date" class="w-full px-3 py-2.5 rounded-2xl bg-pastel-50 border border-pastel-200 text-sm text-pastel-800 focus:outline-none" />
+                </div>
+                <div>
+                  <label for="consult-time" class="block text-xs font-semibold text-pastel-700 mb-1">Jam</label>
+                  <select id="consult-time" class="w-full px-3 py-2.5 rounded-2xl bg-pastel-50 border border-pastel-200 text-sm text-pastel-800 focus:outline-none">
+                    <option value="10:00 WIB">10:00 WIB</option>
+                    <option value="13:30 WIB">13:30 WIB</option>
+                    <option value="16:00 WIB">16:00 WIB</option>
+                    <option value="19:00 WIB">19:00 WIB</option>
+                  </select>
+                </div>
+              </div>
+              <div>
+                <label for="consult-notes" class="block text-xs font-semibold text-pastel-700 mb-1">Topik / Keluhan Singkat</label>
+                <textarea id="consult-notes" rows="3" placeholder="Tuliskan secara singkat hal yang ingin didiskusikan..." class="w-full px-3.5 py-2.5 rounded-2xl bg-pastel-50 border border-pastel-200 text-sm text-pastel-800 focus:outline-none resize-none"></textarea>
+              </div>
+              <button type="submit" class="w-full py-3 rounded-2xl bg-pastel-500 hover:bg-pastel-600 text-white font-semibold text-sm shadow-sm transition-colors">
+                Ajukan Jadwal (Simulasi)
+              </button>
+            </form>
+          </div>
+
+          <div class="soft-card rounded-3xl p-5 space-y-3">
+            <h3 class="text-sm font-bold text-pastel-800">Riwayat Permintaan Jadwal Anda</h3>
+            <div id="consult-history" class="space-y-2 text-xs"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== 6. MOOD TRACKER VIEW ==================== -->
+    <section id="view-mood" class="page-view hidden space-y-6 fade-in">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div>
+          <h1 class="text-2xl sm:text-3xl font-bold text-pastel-800">Mood Tracker</h1>
+          <p class="text-sm text-pastel-700/80">Pantau perasaanmu setiap hari secara privat. Hanya kamu yang dapat melihat catatan ini.</p>
+        </div>
+        <span class="self-start inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-700 text-xs font-semibold">
+          <i data-lucide="lock" class="w-3.5 h-3.5"></i> Data Privat Akun: <span id="mood-owner-label">Tamu</span>
+        </span>
+      </div>
+
+      <div class="grid lg:grid-cols-12 gap-6">
+        <!-- Input Mood Card -->
+        <div class="lg:col-span-5 space-y-5">
+          <div class="soft-card rounded-3xl p-6 space-y-4">
+            <h2 class="text-lg font-bold text-pastel-800">Bagaimana perasaanmu hari ini?</h2>
+            <div class="grid grid-cols-5 gap-2" id="mood-emoji-picker">
+              <button type="button" class="mood-opt flex flex-col items-center p-2.5 rounded-2xl border border-pastel-200 bg-pastel-50/50 hover:bg-pastel-100 transition-all" data-score="5" data-label="Sangat Baik" data-emoji="😄">
+                <span class="text-2xl">😄</span>
+                <span class="text-[10px] font-medium mt-1 text-center">Sangat Baik</span>
+              </button>
+              <button type="button" class="mood-opt flex flex-col items-center p-2.5 rounded-2xl border border-pastel-200 bg-pastel-50/50 hover:bg-pastel-100 transition-all" data-score="4" data-label="Baik" data-emoji="🙂">
+                <span class="text-2xl">🙂</span>
+                <span class="text-[10px] font-medium mt-1 text-center">Baik</span>
+              </button>
+              <button type="button" class="mood-opt flex flex-col items-center p-2.5 rounded-2xl border border-pastel-200 bg-pastel-50/50 hover:bg-pastel-100 transition-all" data-score="3" data-label="Biasa" data-emoji="😐">
+                <span class="text-2xl">😐</span>
+                <span class="text-[10px] font-medium mt-1 text-center">Biasa</span>
+              </button>
+              <button type="button" class="mood-opt flex flex-col items-center p-2.5 rounded-2xl border border-pastel-200 bg-pastel-50/50 hover:bg-pastel-100 transition-all" data-score="2" data-label="Lelah/Sedih" data-emoji="😔">
+                <span class="text-2xl">😔</span>
+                <span class="text-[10px] font-medium mt-1 text-center">Lelah</span>
+              </button>
+              <button type="button" class="mood-opt flex flex-col items-center p-2.5 rounded-2xl border border-pastel-200 bg-pastel-50/50 hover:bg-pastel-100 transition-all" data-score="1" data-label="Cemas/Stres" data-emoji="😰">
+                <span class="text-2xl">😰</span>
+                <span class="text-[10px] font-medium mt-1 text-center">Cemas</span>
+              </button>
+            </div>
+            <form id="mood-form" class="space-y-3">
+              <div>
+                <label for="mood-date" class="block text-xs font-semibold text-pastel-700 mb-1">Tanggal</label>
+                <input type="date" id="mood-date" class="w-full px-3.5 py-2 rounded-2xl bg-pastel-50 border border-pastel-200 text-sm text-pastel-800 focus:outline-none" />
+              </div>
+              <div>
+                <label for="mood-note" class="block text-xs font-semibold text-pastel-700 mb-1">Catatan Singkat</label>
+                <textarea id="mood-note" rows="3" placeholder="Apa yang memicu perasaanmu hari ini?" class="w-full px-3.5 py-2.5 rounded-2xl bg-pastel-50 border border-pastel-200 text-sm text-pastel-800 focus:outline-none resize-none"></textarea>
+              </div>
+              <button type="submit" class="w-full py-3 rounded-2xl bg-pastel-500 hover:bg-pastel-600 text-white font-semibold text-sm transition-colors">
+                Simpan Mood
+              </button>
+            </form>
+          </div>
+
+          <!-- Mood Calendar -->
+          <div class="soft-card rounded-3xl p-6 space-y-3">
+            <div class="flex items-center justify-between">
+              <h3 class="text-base font-bold text-pastel-800">Kalender Mood</h3>
+              <span id="calendar-month-label" class="text-xs font-semibold text-pastel-600"></span>
+            </div>
+            <div class="grid grid-cols-7 gap-1 text-center text-[11px] font-semibold text-pastel-500">
+              <span>Min</span><span>Sen</span><span>Sel</span><span>Rab</span><span>Kam</span><span>Jum</span><span>Sab</span>
+            </div>
+            <div id="mood-calendar-grid" class="grid grid-cols-7 gap-1.5 text-center"></div>
+            <div id="calendar-day-detail" class="text-xs text-pastel-700 bg-pastel-50 rounded-2xl p-3 hidden"></div>
+          </div>
+        </div>
+
+        <!-- Mood Chart & History -->
+        <div class="lg:col-span-7 space-y-5">
+          <div class="soft-card rounded-3xl p-6 space-y-3">
+            <div class="flex items-center justify-between">
+              <h2 class="text-lg font-bold text-pastel-800">Grafik Perubahan Mood</h2>
+              <span class="text-xs text-pastel-600">Skor 1 (Cemas) – 5 (Sangat Baik)</span>
+            </div>
+            <div class="relative h-72">
+              <canvas id="mood-chart-canvas"></canvas>
+            </div>
+          </div>
+
+          <div class="soft-card rounded-3xl p-6 space-y-3">
+            <h3 class="text-base font-bold text-pastel-800">Riwayat Suasana Hati</h3>
+            <div id="mood-history-list" class="space-y-2.5 max-h-80 overflow-y-auto pr-1"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== 7. SELF-CARE CORNER VIEW ==================== -->
+    <section id="view-self-care" class="page-view hidden space-y-6 fade-in">
+      <div>
+        <h1 class="text-2xl sm:text-3xl font-bold text-pastel-800">Self-Care Corner</h1>
+        <p class="text-sm text-pastel-700/80">Aktivitas ringan untuk menenangkan pikiran, merawat diri, dan menjaga keseimbangan kuliah.</p>
+      </div>
+
+      <div class="grid lg:grid-cols-12 gap-6">
+        <!-- Breathing Exercise -->
+        <div class="lg:col-span-6 soft-card rounded-3xl p-6 flex flex-col items-center text-center justify-between space-y-5">
+          <div class="space-y-1">
+            <span class="px-3 py-1 rounded-full bg-pastel-100 text-pastel-600 text-xs font-semibold">Latihan Pernapasan 4-7-8</span>
+            <h2 class="text-xl font-bold text-pastel-800">Tarik Napas, Lepaskan Beban</h2>
+          </div>
+
+          <div class="relative w-48 h-48 flex items-center justify-center">
+            <div id="breath-outer" class="breath-circle w-36 h-36 rounded-full bg-pastel-200/80 flex items-center justify-center shadow-inner">
+              <div class="w-24 h-24 rounded-full bg-white shadow-sm flex flex-col items-center justify-center">
+                <span id="breath-phase" class="text-sm font-bold text-pastel-700">Siap</span>
+                <span id="breath-timer" class="text-xl font-bold text-pastel-500">4s</span>
+              </div>
+            </div>
+          </div>
+
+          <p id="breath-instruction" class="text-xs text-pastel-700/85 max-w-xs">
+            Tarik napas 4 detik, tahan 7 detik, dan hembuskan perlahan 8 detik.
+          </p>
+
+          <div class="flex items-center gap-3">
+            <button type="button" id="btn-breath-start" class="px-5 py-2.5 rounded-2xl bg-pastel-500 hover:bg-pastel-600 text-white text-sm font-semibold transition-colors">Mulai</button>
+            <button type="button" id="btn-breath-reset" class="px-4 py-2.5 rounded-2xl bg-pastel-100 hover:bg-pastel-200 text-pastel-700 text-sm font-semibold transition-colors">Reset</button>
+          </div>
+        </div>
+
+        <!-- Daily Journal -->
+        <div class="lg:col-span-6 soft-card rounded-3xl p-6 space-y-4">
+          <div class="flex items-center justify-between">
+            <h2 class="text-lg font-bold text-pastel-800 flex items-center gap-2">
+              <i data-lucide="notebook-pen" class="w-5 h-5 text-pastel-500"></i> Jurnal Harian
+            </h2>
+            <span class="text-xs text-pastel-600">Tersimpan Privat</span>
+          </div>
+          <form id="journal-form" class="space-y-3">
+            <input type="text" id="journal-title" placeholder="Judul singkat (mis. Hal kecil yang kusyukuri)" class="w-full px-3.5 py-2.5 rounded-2xl bg-pastel-50 border border-pastel-200 text-sm text-pastel-800 focus:outline-none" />
+            <textarea id="journal-body" rows="3" placeholder="Tuliskan pikiranmu secara bebas..." class="w-full px-3.5 py-2.5 rounded-2xl bg-pastel-50 border border-pastel-200 text-sm text-pastel-800 focus:outline-none resize-none"></textarea>
+            <button type="submit" class="px-5 py-2.5 rounded-2xl bg-pastel-500 hover:bg-pastel-600 text-white text-sm font-semibold transition-colors">Simpan Jurnal</button>
+          </form>
+          <div id="journal-list" class="space-y-2 max-h-44 overflow-y-auto pr-1"></div>
+        </div>
+
+        <!-- Grounding & Relaxation Checklist -->
+        <div class="lg:col-span-6 soft-card rounded-3xl p-6 space-y-4">
+          <h2 class="text-lg font-bold text-pastel-800 flex items-center gap-2">
+            <i data-lucide="feather" class="w-5 h-5 text-pastel-500"></i> Panduan Relaksasi 5-4-3-2-1 Grounding
+          </h2>
+          <p class="text-xs text-pastel-700/80">Centang langkah di bawah saat kamu merasa cemas atau pikiran melayang:</p>
+          <div id="grounding-list" class="space-y-2.5"></div>
+        </div>
+
+        <!-- Self-Reflection & Study Balance -->
+        <div class="lg:col-span-6 space-y-5">
+          <div class="soft-card rounded-3xl p-6 space-y-3">
+            <div class="flex items-center justify-between">
+              <h2 class="text-lg font-bold text-pastel-800 flex items-center gap-2">
+                <i data-lucide="sparkles" class="w-5 h-5 text-pastel-500"></i> Refleksi Diri Hari Ini
+              </h2>
+              <button type="button" id="btn-shuffle-prompt" class="text-xs font-semibold text-pastel-600 hover:underline flex items-center gap-1">
+                <i data-lucide="shuffle" class="w-3.5 h-3.5"></i> Ganti Pertanyaan
+              </button>
+            </div>
+            <p id="reflection-prompt-text" class="text-sm font-medium text-pastel-800 bg-pastel-50 p-3.5 rounded-2xl border border-pastel-100"></p>
+            <div class="flex gap-2">
+              <input type="text" id="reflection-answer" placeholder="Jawaban singkatmu..." class="flex-1 px-3.5 py-2 rounded-2xl bg-pastel-50 border border-pastel-200 text-sm focus:outline-none" />
+              <button type="button" id="btn-save-reflection" class="px-4 py-2 rounded-2xl bg-pastel-500 hover:bg-pastel-600 text-white text-xs font-semibold">Simpan</button>
+            </div>
+          </div>
+
+          <div class="soft-card rounded-3xl p-6 space-y-3">
+            <h3 class="text-base font-bold text-pastel-800">Tips Keseimbangan Kuliah &amp; Kehidupan</h3>
+            <ul class="space-y-2 text-xs text-pastel-700/90">
+              <li class="flex items-start gap-2"><span class="text-pastel-500 font-bold">•</span> <strong>Aturan Istirahat 50/10:</strong> Belajar fokus 50 menit, lalu istirahat 10 menit jauh dari layar.</li>
+              <li class="flex items-start gap-2"><span class="text-pastel-500 font-bold">•</span> <strong>Batas Jam Malam:</strong> Tetapkan jam berhenti mengerjakan tugas agar kualitas tidur tetap terjaga.</li>
+              <li class="flex items-start gap-2"><span class="text-pastel-500 font-bold">•</span> <strong>Belajar Berkata Tidak:</strong> Jangan ragu menunda komitmen organisasi tambahan saat energi sedang menipis.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== 8. PROFILE & SETTINGS VIEW ==================== -->
+    <section id="view-profile" class="page-view hidden space-y-6 fade-in">
+      <div>
+        <div class="flex items-center gap-2">
+          <h1 class="text-2xl sm:text-3xl font-bold text-pastel-800">Profil &amp; Pengaturan Akun</h1>
+          <span class="px-2.5 py-0.5 rounded-full bg-pastel-200 text-pastel-700 text-[11px] font-semibold">Autentikasi Simulasi</span>
+        </div>
+        <p class="text-sm text-pastel-700/80">Kelola akun, privasi, notifikasi, dan data pribadimu secara aman di perangkat ini.</p>
+      </div>
+
+      <!-- Auth Panel (when logged out) -->
+      <div id="auth-panel" class="max-w-lg mx-auto soft-card rounded-3xl p-6 sm:p-8 space-y-5">
+        <div class="flex rounded-2xl bg-pastel-50 p-1 border border-pastel-200">
+          <button type="button" id="tab-login" class="flex-1 py-2 rounded-xl text-sm font-semibold bg-white text-pastel-800 shadow-sm">Masuk</button>
+          <button type="button" id="tab-register" class="flex-1 py-2 rounded-xl text-sm font-semibold text-pastel-600">Daftar Baru</button>
+        </div>
+
+        <form id="login-form" class="space-y-3.5">
+          <div>
+            <label for="login-email" class="block text-xs font-semibold text-pastel-700 mb-1">Email</label>
+            <input type="email" id="login-email" placeholder="nama@kampus.ac.id" class="w-full px-3.5 py-2.5 rounded-2xl bg-pastel-50 border border-pastel-200 text-sm focus:outline-none" required />
+          </div>
+          <div>
+            <label for="login-password" class="block text-xs font-semibold text-pastel-700 mb-1">Kata Sandi</label>
+            <input type="password" id="login-password" placeholder="••••••••" class="w-full px-3.5 py-2.5 rounded-2xl bg-pastel-50 border border-pastel-200 text-sm focus:outline-none" required />
+          </div>
+          <button type="submit" class="w-full py-3 rounded-2xl bg-pastel-500 hover:bg-pastel-600 text-white font-semibold text-sm">Masuk ke MindSpace</button>
+          <button type="button" id="btn-demo-login" class="w-full py-2.5 rounded-2xl bg-pastel-100 hover:bg-pastel-200 text-pastel-700 font-semibold text-xs">
+            ✨ Masuk Cepat dengan Akun Demo Mahasiswa
+          </button>
+        </form>
+
+        <form id="register-form" class="space-y-3.5 hidden">
+          <div>
+            <label for="reg-name" class="block text-xs font-semibold text-pastel-700 mb-1">Nama Panggilan</label>
+            <input type="text" id="reg-name" placeholder="Contoh: Raka / Sinta" class="w-full px-3.5 py-2.5 rounded-2xl bg-pastel-50 border border-pastel-200 text-sm focus:outline-none" required />
+          </div>
+          <div>
+            <label for="reg-email" class="block text-xs font-semibold text-pastel-700 mb-1">Email</label>
+            <input type="email" id="reg-email" placeholder="nama@kampus.ac.id" class="w-full px-3.5 py-2.5 rounded-2xl bg-pastel-50 border border-pastel-200 text-sm focus:outline-none" required />
+          </div>
+          <div>
+            <label for="reg-password" class="block text-xs font-semibold text-pastel-700 mb-1">Kata Sandi</label>
+            <input type="password" id="reg-password" placeholder="Minimal 6 karakter" minlength="6" class="w-full px-3.5 py-2.5 rounded-2xl bg-pastel-50 border border-pastel-200 text-sm focus:outline-none" required />
+          </div>
+          <button type="submit" class="w-full py-3 rounded-2xl bg-pastel-500 hover:bg-pastel-600 text-white font-semibold text-sm">Daftar Akun (Simulasi)</button>
+        </form>
+      </div>
+
+      <!-- Logged-in Dashboard -->
+      <div id="profile-dashboard" class="hidden grid lg:grid-cols-12 gap-6">
+        <!-- Profile Info -->
+        <div class="lg:col-span-5 soft-card rounded-3xl p-6 space-y-4">
+          <div class="flex items-center justify-between">
+            <h2 class="text-lg font-bold text-pastel-800">Profil Pengguna</h2>
+            <button type="button" id="btn-logout" class="text-xs font-semibold text-rose-600 hover:underline">Keluar</button>
+          </div>
+          <form id="profile-update-form" class="space-y-3">
+            <div>
+              <label for="prof-name" class="block text-xs font-semibold text-pastel-700 mb-1">Nama Panggilan</label>
+              <input type="text" id="prof-name" class="w-full px-3.5 py-2.5 rounded-2xl bg-pastel-50 border border-pastel-200 text-sm focus:outline-none" />
+            </div>
+            <div>
+              <label for="prof-email" class="block text-xs font-semibold text-pastel-700 mb-1">Email</label>
+              <input type="email" id="prof-email" disabled class="w-full px-3.5 py-2.5 rounded-2xl bg-slate-100 border border-pastel-100 text-sm text-slate-500" />
+            </div>
+            <div>
+              <label for="prof-status" class="block text-xs font-semibold text-pastel-700 mb-1">Status / Kampus (Opsional)</label>
+              <input type="text" id="prof-status" placeholder="Contoh: Mahasiswa Semester 5" class="w-full px-3.5 py-2.5 rounded-2xl bg-pastel-50 border border-pastel-200 text-sm focus:outline-none" />
+            </div>
+            <button type="submit" class="px-5 py-2.5 rounded-2xl bg-pastel-500 hover:bg-pastel-600 text-white text-sm font-semibold">Simpan Profil</button>
+          </form>
+        </div>
+
+        <!-- Privacy, Notifications, History & Danger Zone -->
+        <div class="lg:col-span-7 space-y-5">
+          <div class="soft-card rounded-3xl p-6 space-y-4">
+            <h2 class="text-lg font-bold text-pastel-800">Pengaturan Privasi &amp; Notifikasi</h2>
+            <div class="space-y-3 text-sm">
+              <label class="flex items-center justify-between p-3 rounded-2xl bg-pastel-50/70 cursor-pointer">
+                <span>Selalu gunakan mode anonim di Story Sharing</span>
+                <input type="checkbox" id="pref-anon" class="w-4 h-4 accent-pastel-500" />
+              </label>
+              <label class="flex items-center justify-between p-3 rounded-2xl bg-pastel-50/70 cursor-pointer">
+                <span>Kunci data Mood Tracker khusus akun ini</span>
+                <input type="checkbox" id="pref-private-mood" class="w-4 h-4 accent-pastel-500" />
+              </label>
+              <label class="flex items-center justify-between p-3 rounded-2xl bg-pastel-50/70 cursor-pointer">
+                <span>Pengingat harian pencatatan Mood Tracker</span>
+                <input type="checkbox" id="pref-notif-mood" class="w-4 h-4 accent-pastel-500" />
+              </label>
+              <label class="flex items-center justify-between p-3 rounded-2xl bg-pastel-50/70 cursor-pointer">
+                <span>Notifikasi artikel &amp; webinar Psychology Corner</span>
+                <input type="checkbox" id="pref-notif-webinar" class="w-4 h-4 accent-pastel-500" />
+              </label>
+            </div>
+          </div>
+
+          <div class="soft-card rounded-3xl p-6 space-y-4">
+            <h2 class="text-lg font-bold text-pastel-800">Riwayat Aktivitas &amp; Pengelolaan Data</h2>
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
+              <div class="p-3 rounded-2xl bg-pastel-50">
+                <p id="stat-moods" class="text-xl font-bold text-pastel-700">0</p>
+                <p class="text-[11px] text-pastel-600">Mood Log</p>
+              </div>
+              <div class="p-3 rounded-2xl bg-pastel-50">
+                <p id="stat-journals" class="text-xl font-bold text-pastel-700">0</p>
+                <p class="text-[11px] text-pastel-600">Jurnal</p>
+              </div>
+              <div class="p-3 rounded-2xl bg-pastel-50">
+                <p id="stat-stories" class="text-xl font-bold text-pastel-700">0</p>
+                <p class="text-[11px] text-pastel-600">Cerita Anonim</p>
+              </div>
+              <div class="p-3 rounded-2xl bg-pastel-50">
+                <p id="stat-consults" class="text-xl font-bold text-pastel-700">0</p>
+                <p class="text-[11px] text-pastel-600">Jadwal Demo</p>
+              </div>
+            </div>
+            <div class="flex flex-wrap gap-3 pt-2">
+              <button type="button" id="btn-clear-history" class="px-4 py-2.5 rounded-2xl bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-200 text-xs font-semibold">
+                Bersihkan Riwayat Aktivitas
+              </button>
+              <button type="button" id="btn-delete-account" class="px-4 py-2.5 rounded-2xl bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 text-xs font-semibold">
+                Hapus Akun &amp; Semua Data Pribadi
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="mt-16 border-t border-pastel-200/80 bg-white/80 backdrop-blur-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 grid md:grid-cols-12 gap-8">
+      <div class="md:col-span-5 space-y-3">
+        <div class="flex items-center gap-2.5">
+          <img src="assets/logo-mindspace.png" alt="Logo MindSpace" class="h-9 w-auto object-contain" />
+          <div>
+            <p class="font-bold text-pastel-800 text-base">MindSpace</p>
+            <p class="text-xs text-pastel-600">Safe Place for Tired Minds</p>
+          </div>
+        </div>
+        <p class="text-xs text-pastel-700/80 leading-relaxed max-w-sm">
+          Platform digital dukungan emosional awal dan edukasi kesehatan mental untuk mahasiswa dan generasi muda.
+        </p>
+      </div>
+      <div class="md:col-span-4 space-y-2 text-xs">
+        <p class="font-bold text-pastel-800 text-sm">Navigasi Cepat</p>
+        <div class="grid grid-cols-2 gap-1.5 text-pastel-700">
+          <button type="button" data-nav="ai-buddy" class="text-left hover:text-pastel-500">AI Buddy</button>
+          <button type="button" data-nav="stories" class="text-left hover:text-pastel-500">Anonymous Story</button>
+          <button type="button" data-nav="psychology" class="text-left hover:text-pastel-500">Psychology Corner</button>
+          <button type="button" data-nav="consultation" class="text-left hover:text-pastel-500">Konsultasi Psikolog</button>
+          <button type="button" data-nav="mood" class="text-left hover:text-pastel-500">Mood Tracker</button>
+          <button type="button" data-nav="self-care" class="text-left hover:text-pastel-500">Self-Care Corner</button>
+        </div>
+      </div>
+      <div class="md:col-span-3 space-y-2 text-xs text-pastel-700">
+        <p class="font-bold text-pastel-800 text-sm">Kontak &amp; Bantuan</p>
+        <p>Email: <span class="font-medium">halo@mindspace.id</span> (contoh)</p>
+        <p>Darurat Kesehatan Jiwa RI: <strong class="text-rose-600">119 ext. 8 / Healing119.id</strong></p>
+      </div>
+    </div>
+    <div class="border-t border-pastel-100 py-4 text-center text-[11px] text-pastel-600 px-4">
+      © 2026 MindSpace – Safe Place for Tired Minds. Prototipe Interaktif Edukasi &amp; Dukungan Emosional Awal.
+    </div>
+  </footer>
+
+  <!-- Reusable In-Page Modal -->
+  <div id="app-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-pastel-800/40 backdrop-blur-xs p-4">
+    <div class="bg-white rounded-3xl max-w-xl w-full p-6 shadow-2xl border border-pastel-200 max-h-[85vh] overflow-y-auto space-y-4">
+      <div class="flex items-start justify-between gap-3">
+        <h3 id="modal-title" class="text-lg font-bold text-pastel-800"></h3>
+        <button type="button" id="modal-close" class="p-1.5 rounded-xl hover:bg-pastel-100 text-pastel-600">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+      <div id="modal-body" class="text-sm text-pastel-700 leading-relaxed space-y-3"></div>
+      <div id="modal-footer" class="flex justify-end gap-2 pt-2"></div>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toast-container" class="fixed bottom-5 right-5 z-50 space-y-2 pointer-events-none"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>
